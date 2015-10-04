@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DoorBuddy</string>
+    <string name="action_settings">Settings</string>
+    <string name="typeUsername">Type Username</string>
+    <string name="successString">Success!</string>
+    <string name="failureString">Failure! Door Locked. Try Again.</string>
+</resources>
