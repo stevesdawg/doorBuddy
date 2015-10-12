@@ -35,40 +35,37 @@ public class AndroidInputHandler implements Runnable {
 				Pattern p = Pattern.compile("<D:>(.*)<M:>(.*)<U:>(.*)<T:>(.*)");
 				Matcher m = p.matcher(inData);
 				
-				String dest = m.group(1);
-				String message = m.group(2);
-				String uname = m.group(3);
-				String time = m.group(4);
-				
-				if(dest.equals("SERVER"))
+				if(m.matches())
 				{
-					if(message.equals("CLOSE"))
+					String dest = m.group(1);
+					String message = m.group(2);
+					String uname = m.group(3);
+					String time = m.group(4);
+					
+					if(dest.equals("SERVER"))
+					{
+						if(message.equals("CLOSE"))
+						{
+							try {
+								androidSockets.remove(uname, s);
+								System.out.println(androidSockets);
+								in.close();
+								s.close();
+								closed = true;
+								System.out.println(time + ": " + "Username: " + uname + " disconnected.");
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+					else if(dest.equals("ARDUINO"))
 					{
 						try {
-							PrintWriter out = new PrintWriter(s.getOutputStream());
-							out.println("Disconnected From Server");
-							out.flush();
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-						androidSockets.remove(uname, s);
-						in.close();
-						try {
-							s.close();
-						} catch (IOException e) {
+							messages.put(inData);
+							System.out.println("Incoming: " + inData);
+						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
-						closed = true;
-						System.out.println(time + ": " + "Username: " + uname + " disconnected.");
-					}
-				}
-				else if(dest.equals("ARDUINO"))
-				{
-					try {
-						messages.put(inData);
-						System.out.println("Incoming: " + inData);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
 					}
 				}
 			}

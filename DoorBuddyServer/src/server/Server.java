@@ -22,10 +22,10 @@ public class Server {
 		
 		ServerSocket server = new ServerSocket(1809);
 		System.out.println("Server running on: 1809. Listening...");
-		System.out.println(server.getLocalSocketAddress());
 		while(true)
 		{
 			Socket incoming = server.accept();
+			System.out.println("Device Connected!");
 			Scanner in = new Scanner(incoming.getInputStream());
 			if(in.hasNextLine())
 			{
